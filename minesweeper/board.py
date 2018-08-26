@@ -125,28 +125,98 @@ class Board(object):
                                 self.board[r][c].addNext()
                             if self.board[r+1][c-1].getMine():
                                 self.board[r][c].addNext()
+
     def play(self, row, column, action):
+        cell = self.board[row][column]
         if action == "U":
-            self.board[row][column].uncover()
-            if self.board[row][column].getCover():
+            cell.uncover()
+            if cell.getCover():
                 return True
-            if self.board[row][column].getMine():
+            elif cell.getMine():
                 for i in range(len(self.minesLoc)):
                     pos = self.minesLoc[i].split(',')
                     rowAux = int(pos[0])
                     colAux = int(pos[1])
                     self.board[rowAux][colAux].uncover()
-                return False
+                return False 
             else:
-                self.checkCell(row, column)
+                self.uncoverCell(row, column)
                 return True
         elif action == "M":
-            self.board[row][column].mark()
+            cell.mark()
             self.marks.append(str(row) + ',' + str(column))
             return True
 
-    def checkCell(self, row, column):
-        pass
+    def uncoverCell(self, row, column):
+        if row == 0:
+            cellD = self.board[row+1][column]
+            if column == 0:
+                cellR = self.board[row][column+1]
+                cellRD = self.board[row+1][column+1]
+                if cellR.getNext() == 0 and cellR.getCover() and not cellR.getMine():
+                    cellR.uncover()
+                    self.uncoverCell(row, column+1)
+                elif cellR.getNext() != 0 and cellR.getCover() and not cellR.getMine():
+                    cellR.uncover()
+                if cellRD.getNext() == 0 and cellRD.getCover() and not cellRD.getMine():
+                    cellRD.uncover()
+                    self.uncoverCell(row+1, column+1)
+                elif cellRD.getNext() != 0 and cellRD.getCover() and not cellRD.getMine():
+                    cellRD.uncover()
+                if cellD.getNext() == 0 and cellD.getCover() and not cellD.getMine():
+                    cellD.uncover()
+                    self.uncoverCell(row+1, column)
+                elif cellD.getNext() != 0 and cellD.getCover() and not cellD.getMine():
+                    cellD.uncover()
+            if column == self.width-1:
+                cellL = self.board[row][column-1]
+                cellLD = self.board[row+1][column-1]
+                if cellL.getNext() == 0 and cellL.getCover() and not cellL.getMine():
+                    cellL.uncover()
+                    self.uncoverCell(row, column-1)
+                elif cellL.getNext() != 0 and cellL.getCover() and not cellL.getMine():
+                    cellL.uncover()
+                if cellLD.getNext() == 0 and cellLD.getCover() and not cellLD.getMine():
+                    cellLD.uncover()
+                    self.uncoverCell(row+1, column-1)
+                elif cellLD.getNext() != 0 and cellLD.getCover() and not cellLD.getMine():
+                    cellLD.uncover()
+                if cellD.getNext() == 0 and cellD.getCover() and not cellD.getMine():
+                    cellD.uncover()
+                    self.uncoverCell(row+1, column)
+                elif cellD.getNext() != 0 and cellD.getCover() and not cellD.getMine():
+                    cellD.uncover()
+            else:
+                cellR = self.board[row][column+1]
+                cellRD = self.board[row+1][column+1]
+                cellL = self.board[row][column-1]
+                cellLD = self.board[row+1][column-1]
+                if cellL.getNext() == 0 and cellL.getCover() and not cellL.getMine():
+                    cellL.uncover()
+                    self.uncoverCell(row, column-1)
+                elif cellL.getNext() != 0 and cellL.getCover() and not cellL.getMine():
+                    cellL.uncover()
+                if cellLD.getNext() == 0 and cellLD.getCover() and not cellLD.getMine():
+                    cellLD.uncover()
+                    self.uncoverCell(row+1, column-1)
+                elif cellLD.getNext() != 0 and cellLD.getCover() and not cellLD.getMine():
+                    cellLD.uncover()
+                if cellD.getNext() == 0 and cellD.getCover() and not cellD.getMine():
+                    cellD.uncover()
+                    self.uncoverCell(row+1, column)
+                elif cellD.getNext() != 0 and cellD.getCover() and not cellD.getMine():
+                    cellD.uncover()
+                if cellRD.getNext() == 0 and cellRD.getCover() and not cellRD.getMine():
+                    cellRD.uncover()
+                    self.uncoverCell(row+1, column+1)
+                elif cellRD.getNext() != 0 and cellRD.getCover() and not cellRD.getMine():
+                    cellRD.uncover()
+                if cellR.getNext() == 0 and cellR.getCover() and not cellR.getMine():
+                    cellR.uncover()
+                    self.uncoverCell(row, column+1)
+                if cellR.getNext() != 0 and cellR.getCover() and not cellR.getMine():
+                    cellR.uncover()
+
 
     def printBoard(self):
         for r in range(self.height):

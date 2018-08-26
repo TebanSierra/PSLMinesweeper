@@ -27,7 +27,10 @@ class Cell(object):
 
     def addNext(self):
         self.minesNext = self.minesNext + 1
-        
+    
+    def getNext(self):
+        return self.minesNext
+
     def getState(self):
         state = {'Cover': self.isCover, 'Mine': self.isMine, 'Mark': self.isMarked}
         return state

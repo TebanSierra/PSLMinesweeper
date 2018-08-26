@@ -10,3 +10,4 @@ game.printBoard()
 while(game.isPlaying()):
     game.play()
     game.printBoard()
+
