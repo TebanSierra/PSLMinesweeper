@@ -13,6 +13,7 @@ class GamePlay(object):
     def __init__(self, height, width, mines):
         self.board = board.Board(height, width, mines)
         self.playing = True
+        self.msg = ''
     
     def play(self):
         row, columm, action = input("Select a Cell and an Action: ").split()
@@ -31,7 +32,7 @@ class GamePlay(object):
                 row, columm, action = input("Select a Cell and an Action: ").split()
             else:
                 invalidPlay = False
-        self.playing = self.board.play(rowNum-1, colNum-1, action)             
+        self.playing, self.msg = self.board.play(rowNum-1, colNum-1, action)             
 
     def printBoard(self):
         self.board.printBoard()

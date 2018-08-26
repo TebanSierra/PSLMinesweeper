@@ -11,7 +11,10 @@ class Cell(object):
         self.isCover = True
         self.isMine = isMine
         self.isMarked = False
-        self.minesNext = 0
+        if isMine:
+            self.minesNext = -1
+        else:
+            self.minesNext = 0
 
     def uncover(self):
         self.isCover = False
