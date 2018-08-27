@@ -1,5 +1,16 @@
 #!/usr/bin/python3
+'''
+@Author: Esteban Sierra Munera
+@PersonalEmail: esteban.sierram@gmail.com
+@CollegeEmail: esierra5@eafit.edu.co
+@CollegeEmail2: esierra@purdue.edu
+@LasUpdate: August 27th, 2018
+
+Main script for minesweeper game for PSL
+Internship Programming Challenge
+'''
 import gameplay as gp
+
 
 canPlay = False
 

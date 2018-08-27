@@ -1,20 +1,23 @@
 #!/usr/bin/python3
 import cell
 import board
-import color as color
 
-
-COVER = 0
-MINE = 1
-UNCOVER = 2
-MARK = 3
 
 class GamePlay(object):
+    '''
+    Game Play initialization
+    @arg height (Number of board rows)
+    @arg width (Number of board columns)
+    @arg mines (number of mines in game)
+    '''
     def __init__(self, height, width, mines):
         self.board = board.Board(height, width, mines)
         self.playing = True
         self.msg = ''
     
+    '''
+    Method controller for game play. it makes all calls to board
+    '''
     def play(self):
         row, column, action = self.askPlay()
         invalidPlay = True
@@ -33,12 +36,23 @@ class GamePlay(object):
 
         return self.msg           
 
+    '''
+    Call board's print method
+    '''
     def printBoard(self):
         self.board.printBoard()
 
+    '''
+    Game play status
+    return True/False acording to checkBoard
+    '''
     def isPlaying(self):
         return self.playing
 
+    '''
+    Check if each play is valid and has all the information needed
+    return row, column, action
+    '''
     def askPlay(self):
         goodPlay = False
         while(not goodPlay):
