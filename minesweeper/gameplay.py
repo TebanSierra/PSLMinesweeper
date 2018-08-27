@@ -16,26 +16,35 @@ class GamePlay(object):
         self.msg = ''
     
     def play(self):
-        row, columm, action = input("Select a Cell and an Action: ").split()
-        rowNum = int(row) 
-        colNum = int(columm)
+        row, column, action = self.askPlay()
         invalidPlay = True
         while(invalidPlay):
-            rowNum = int(row) 
-            colNum = int(columm)
-            if rowNum < 1 or rowNum > self.board.height or \
-                colNum < 1 or colNum > self.board.width:
+            if row < 1 or row > self.board.height or \
+                column < 1 or column > self.board.width:
                 print("Play must be a valid cell")
-                row, columm, action = input("Select a Cell and an Action: ").split()
+                row, column, action = self.askPlay()
             elif not ((action != "U") ^ (action != "M")):
                 print("Play must be Uncover (U) or Mark (M)")
-                row, columm, action = input("Select a Cell and an Action: ").split()
+                row, column, action = self.askPlay()
             else:
                 invalidPlay = False
-        self.playing, self.msg = self.board.play(rowNum-1, colNum-1, action)             
+        self.board.play(row-1, column-1, action)
+        self.playing, self.msg = self.board.checkBoard()
+
+        return self.msg           
 
     def printBoard(self):
         self.board.printBoard()
 
     def isPlaying(self):
         return self.playing
+
+    def askPlay(self):
+        goodPlay = False
+        while(not goodPlay):
+            try:
+                row, columm, action = input("Select a Cell and an Action: ").split()
+                goodPlay = True
+                return int(row), int(columm), action.upper()
+            except ValueError:
+                print("Enter all the play.")

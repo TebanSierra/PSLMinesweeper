@@ -14,9 +14,8 @@ class Board(object):
         self.mines = mines
         self.minesLoc = []
         self.marks = []
-        self.marksLeft = mines
         self.totalCells = width*height
-        self.uncoOrMark = 0
+        self.uncovered = 0
 
         minesUsed = 0
         while(minesUsed < mines):
@@ -133,24 +132,23 @@ class Board(object):
         cell = self.board[row][column]
         if action == "U":
             cell.uncover()
-            if not cell.getCover():
-                return True, ''
+            if cell.getCover():
+                return True
             elif cell.getMine():
                 for i in range(len(self.minesLoc)):
                     pos = self.minesLoc[i].split(',')
                     rowAux = int(pos[0])
                     colAux = int(pos[1])
                     self.board[rowAux][colAux].uncover()
-                return(False, "Game Over") 
+                return False 
             else:
                 self.uncoOrMark = self.uncoOrMark + 1
                 self.uncoverCell(row, column)
-                return True, ''
+                return True
         elif action == "M":
             cell.mark()
-            self.uncoOrMark = self.uncoOrMark + 1
             self.marks.append(str(row) + ',' + str(column))
-            return True, ''
+            return True
 
     def uncoverCell(self, row, column):
         if self.board[row][column].getNext() == 0:
@@ -379,6 +377,7 @@ class Board(object):
                 elif column == self.width-1:
                     cellL = self.board[row][column-1]
                     cellUL = self.board[row-1][column-1]
+                    cellLL = self.board[row+1][column-1]
                     if cellL.getNext() == 0 and cellL.getCover() and not cellL.getMine():
                         cellL.uncover()
                         self.uncoOrMark = self.uncoOrMark + 1
@@ -399,6 +398,20 @@ class Board(object):
                         self.uncoverCell(row+1, column)
                     elif cellU.getNext() != 0 and cellU.getCover() and not cellU.getMine():
                         cellU.uncover()
+                        self.uncoOrMark = self.uncoOrMark + 1
+                    if cellD.getNext() == 0 and cellD.getCover() and not cellD.getMine():
+                        cellD.uncover()
+                        self.uncoOrMark = self.uncoOrMark + 1
+                        self.uncoverCell(row+1, column)
+                    elif cellD.getNext() != 0 and cellD.getCover() and not cellD.getMine():
+                        cellD.uncover()
+                        self.uncoOrMark = self.uncoOrMark + 1
+                    if cellLL.getNext() == 0 and cellLL.getCover() and not cellLL.getMine():
+                        cellLL.uncover()
+                        self.uncoOrMark = self.uncoOrMark + 1
+                        self.uncoverCell(row+1, column-1)
+                    elif cellLL.getNext() != 0 and cellLL.getCover() and not cellLL.getMine():
+                        cellLL.uncover()
                         self.uncoOrMark = self.uncoOrMark + 1
                 else:
                     cellR = self.board[row][column+1]
@@ -466,8 +479,15 @@ class Board(object):
                     
     def checkBoard(self):
         if len(self.minesLoc) == len(self.marks):
-            if self.totalCells == self.uncoOrMark:
-                return False
+            if self.totalCells-len(self.minesLoc) == self.uncoOrMark:
+                return False, "You Win!"
+        for i in range(len(self.minesLoc)):
+            pos = self.minesLoc[i].split(',')
+            row = int(pos[0])
+            col = int(pos[1])
+            if not self.board[row][col].getCover():
+                return False, "Game Over. You Lose!"
+        return True, ''
 
     def printBoard(self):
         for r in range(self.height):
